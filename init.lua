@@ -41,11 +41,13 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local base_perlin_map = minetest.get_perlin_map(base_params, map_lengths_xyz):get3dMap_flat(minp)
 	local ore_perlin_map = minetest.get_perlin_map(ore_params, map_lengths_xyz):get3dMap_flat(minp)
 
-	local c_base = minetest.get_content_id("default:glass")
-	local c_ore1 = minetest.get_content_id("default:steelblock")
-	local c_ore2 = minetest.get_content_id("default:mese")
-	local c_ore3 = minetest.get_content_id("default:goldblock")
-	local c_ore4 = minetest.get_content_id("default:diamondblock")
+	local c_base = minetest.get_content_id("default:stone")
+	local c_ore1 = minetest.get_content_id("default:ice")
+	local c_ore2 = minetest.get_content_id("default:steelblock")
+	local c_ore3 = minetest.get_content_id("default:copperblock")
+	local c_ore4 = minetest.get_content_id("default:mese")
+	local c_ore5 = minetest.get_content_id("default:goldblock")
+	local c_ore6 = minetest.get_content_id("default:diamondblock")
 	local c_air = minetest.get_content_id("air")
 
 	local i = 1
@@ -67,16 +69,22 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 			if is_solid or base_n > chance then
 
-				if ore_n > 0.95 then
+				if ore_n > 0.99 then
+					data[index] = c_ore6
+
+				elseif ore_n > 0.97 then
+					data[index] = c_ore5
+
+				elseif ore_n > 0.95 then
 					data[index] = c_ore4
 
 				elseif ore_n > 0.9 then
 					data[index] = c_ore3
 
-				elseif ore_n > 0.85 then
+				elseif ore_n > 0.8 then
 					data[index] = c_ore2
 
-				elseif ore_n > 0.8 then
+				elseif ore_n > 0.45 then
 					data[index] = c_ore1
 
 				else

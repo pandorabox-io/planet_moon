@@ -43,11 +43,12 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 	local c_base = minetest.get_content_id("default:stone")
 	local c_ore1 = minetest.get_content_id("default:ice")
-	local c_ore2 = minetest.get_content_id("default:steelblock")
-	local c_ore3 = minetest.get_content_id("default:copperblock")
-	local c_ore4 = minetest.get_content_id("default:mese")
-	local c_ore5 = minetest.get_content_id("default:goldblock")
-	local c_ore6 = minetest.get_content_id("default:diamondblock")
+	local c_ore2 = minetest.get_content_id("default:stone_with_coal")
+	local c_ore3 = minetest.get_content_id("default:stone_with_iron")
+	local c_ore4 = minetest.get_content_id("default:stone_with_copper")
+	local c_ore5 = minetest.get_content_id("default:stone_with_gold")
+	local c_ore6 = minetest.get_content_id("default:stone_with_mese")
+	local c_ore7 = minetest.get_content_id("default:stone_with_diamond")
 	local c_air = minetest.get_content_id("air")
 
 	local i = 1
@@ -69,13 +70,20 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 			if is_solid or base_n > chance then
 
-				if ore_n > 0.99 then
+
+				if ore_n > 1 then
+					data[index] = c_air
+
+				elseif ore_n > 0.998 then
+					data[index] = c_ore7
+
+				elseif ore_n > 0.995 then
 					data[index] = c_ore6
 
-				elseif ore_n > 0.97 then
+				elseif ore_n > 0.99 then
 					data[index] = c_ore5
 
-				elseif ore_n > 0.95 then
+				elseif ore_n > 0.98 then
 					data[index] = c_ore4
 
 				elseif ore_n > 0.9 then

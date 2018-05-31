@@ -12,8 +12,7 @@ local testparam = {
 }
 
 minetest.register_on_generated(function(minp, maxp, seed)
-	if minp.y < 200 then
-		-- start above y 200
+	if minp.y < 100 or minp.y > 180 then
 		return
 	end
 
@@ -22,14 +21,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local data = vm:get_data()
 
 	local side_length = maxp.x - minp.x + 1 -- 80
-	local map_lengths_xyz = {x=side_length, y=side_length}
+	local map_lengths_xyz = {x=side_length, y=side_length, z=side_length}
 	local perlin_map = minetest.get_perlin_map(testparam, map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
-
-	-- 80380 = 6400
-
-	print(side_length)
-	print(table.getn(perlin_map))
-	print(perlin_map[1])
 
 	local c_stone = minetest.get_content_id("default:stone")
 

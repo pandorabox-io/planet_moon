@@ -16,20 +16,20 @@ local base_params = {
 local ore_params = {
    offset = 0,
    scale = 1,
-   spread = {x=1024, y=512, z=1024},
-   seed = 23085729,
-   octaves = 5,
+   spread = {x=128, y=64, z=128},
+   seed = 3454657,
+   octaves = 4,
    persist = 0.6
 }
 
 minetest.register_on_generated(function(minp, maxp, seed)
 
-	if minp.y < 100 or minp.y > 280 then
+	if minp.y < 1000 or minp.y > 1280 then
 		return
 	end
 
 	-- colid layer
-	local is_solid = minp.y < 200
+	local is_solid = minp.y < 1200
 
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
@@ -41,10 +41,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local base_perlin_map = minetest.get_perlin_map(base_params, map_lengths_xyz):get3dMap_flat(minp)
 	local ore_perlin_map = minetest.get_perlin_map(ore_params, map_lengths_xyz):get3dMap_flat(minp)
 
-	local c_base = minetest.get_content_id("default:stone")
-	local c_ore1 = minetest.get_content_id("default:mese")
-	local c_ore2 = minetest.get_content_id("default:goldblock")
-	local c_ore3 = minetest.get_content_id("default:diamondblock")
+	local c_base = minetest.get_content_id("default:glass")
+	local c_ore1 = minetest.get_content_id("default:steelblock")
+	local c_ore2 = minetest.get_content_id("default:mese")
+	local c_ore3 = minetest.get_content_id("default:goldblock")
+	local c_ore4 = minetest.get_content_id("default:diamondblock")
 	local c_air = minetest.get_content_id("air")
 
 	local i = 1
@@ -66,15 +67,16 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 			if is_solid or base_n > chance then
 
-				local ore_hit = ore_n - chance
+				if ore_n > 0.95 then
+					data[index] = c_ore4
 
-				if ore_hit > 0.2 then
+				elseif ore_n > 0.9 then
 					data[index] = c_ore3
 
-				elseif ore_hit > -0.3 then
+				elseif ore_n > 0.85 then
 					data[index] = c_ore2
 
-				elseif ore_hit > -0.5 then
+				elseif ore_n > 0.8 then
 					data[index] = c_ore1
 
 				else

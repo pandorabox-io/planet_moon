@@ -5,9 +5,9 @@
 local testparam = {
    offset = 0,
    scale = 1,
-   spread = {x=2048, y=2048, z=2048},
-   seed = 1337,
-   octaves = 6,
+   spread = {x=1024, y=512, z=1024},
+   seed = 3468584,
+   octaves = 5,
    persist = 0.6
 }
 
@@ -22,26 +22,35 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 	local side_length = maxp.x - minp.x + 1 -- 80
 	local map_lengths_xyz = {x=side_length, y=side_length, z=side_length}
-	local perlin_map = minetest.get_perlin_map(testparam, map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
+	local perlin_map = minetest.get_perlin_map(testparam, map_lengths_xyz):get3dMap_flat(minp)
 
 	local c_stone = minetest.get_content_id("default:stone")
 
 	local i = 1
-	for x=minp.x,maxp.x do
 	for z=minp.z,maxp.z do
+	for y=minp.y,maxp.y do
+	for x=minp.x,maxp.x do
 
+
+		local index = area:index(x,y,z)
 		local n = perlin_map[i]
-		i = i + 1
 
-		local height = math.floor(n * side_length)
+		if i < 40 then
+			print("i:"..i.." -> n:"..n)
+		end
 
-		for y=0, height do
-			local index = area:index(x,minp.y+y,z)
+		-- higher elevation = lower chance
+		local chance = (y-minp.y) / side_length
+
+		if n > chance then
 			data[index] = c_stone
 		end
 
-	end --z
+		i = i + 1
+
 	end --x
+	end --y
+	end --z
  
 	vm:set_data(data)
 	vm:write_to_map()

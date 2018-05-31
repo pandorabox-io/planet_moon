@@ -1,6 +1,7 @@
 
 
 -- http://dev.minetest.net/PerlinNoiseMap
+-- TODO: https://github.com/Calinou/bedrock
 
 -- basic planet material noise
 local base_params = {

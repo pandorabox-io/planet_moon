@@ -1,5 +1,6 @@
 local has_technic_mod = minetest.get_modpath("technic")
 local has_vacuum_mod = minetest.get_modpath("vacuum")
+local has_bedrock_mod = minetest.get_modpath("bedrock")
 
 -- http://dev.minetest.net/PerlinNoiseMap
 -- TODO: https://github.com/Calinou/bedrock
@@ -28,6 +29,7 @@ local c_base = minetest.get_content_id("default:stone")
 local c_air = minetest.get_content_id("air")
 local c_ignore = minetest.get_content_id("ignore")
 local c_vacuum
+local c_bedrock
 
 local ores = {}
 local min_chance = 1 -- everything below is stone
@@ -35,6 +37,10 @@ local min_chance = 1 -- everything below is stone
 local register_ore = function(def)
 	table.insert(ores, def)
 	min_chance = math.min(def.chance, min_chance)
+end
+
+if has_bedrock_mod then
+	c_bedrock = minetest.get_content_id("bedrock:bedrock")
 end
 
 if has_vacuum_mod then
@@ -148,11 +154,14 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 		local index = area:index(x,y,z)
 
-		-- higher elevation = lower chance
-		local chance = (y-minp.y) / side_length
+		if y >= 5000 and y < 5010 and has_bedrock_mod then
+			data[index] = c_bedrock
 
-		if data[index] == c_air or data[index] == c_vacuum or data[index] == c_ignore then
+		elseif data[index] == c_air or data[index] == c_vacuum or data[index] == c_ignore then
 			-- unpopulated node
+
+			-- higher elevation = lower chance
+			local chance = (y-minp.y) / side_length
 
 			local base_n = base_perlin_map[i]
 			local ore_n = ore_perlin_map[i]

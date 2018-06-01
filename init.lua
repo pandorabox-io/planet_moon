@@ -25,12 +25,12 @@ local ore_params = {
 
 minetest.register_on_generated(function(minp, maxp, seed)
 
-	if minp.y < 1000 or minp.y > 1280 then
+	if minp.y < 5000 or minp.y > 5280 then
 		return
 	end
 
 	-- colid layer
-	local is_solid = minp.y < 1200
+	local is_solid = minp.y < 5200
 
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}

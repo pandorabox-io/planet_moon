@@ -1,4 +1,5 @@
-
+local has_technic_mod = minetest.get_modpath("technic")
+local has_vacuum_mod = minetest.get_modpath("vacuum")
 
 -- http://dev.minetest.net/PerlinNoiseMap
 -- TODO: https://github.com/Calinou/bedrock
@@ -25,6 +26,8 @@ local ore_params = {
 
 local c_base = minetest.get_content_id("default:stone")
 local c_air = minetest.get_content_id("air")
+local c_ignore = minetest.get_content_id("ignore")
+local c_vacuum
 
 local ores = {}
 local min_chance = 1 -- everything below is stone
@@ -34,10 +37,20 @@ local register_ore = function(def)
 	min_chance = math.min(def.chance, min_chance)
 end
 
-register_ore({
-	id = minetest.get_content_id("air"),
-	chance = 1
-})
+if has_vacuum_mod then
+
+	c_vacuum = minetest.get_content_id("vacuum:vacuum")
+	register_ore({
+		id = c_vacuum,
+		chance = 1
+	})
+
+else
+	register_ore({
+		id = minetest.get_content_id("air"),
+		chance = 1
+	})
+end
 
 register_ore({
 	id = minetest.get_content_id("default:stone_with_diamond"),
@@ -74,6 +87,34 @@ register_ore({
 	chance = 0.45
 })
 
+if has_technic_mod then
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_uranium"),
+		chance = 0.95
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_chromium"),
+		chance = 0.82
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_zinc"),
+		chance = 0.75
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_lead"),
+		chance = 0.7
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_sulfur"),
+		chance = 0.6
+	})
+
+end
+
 -- sort ores
 table.sort(ores, function(a,b)
 	return b.chance < a.chance
@@ -81,6 +122,7 @@ end)
 
 minetest.register_on_generated(function(minp, maxp, seed)
 
+	-- TODO: config height
 	if minp.y < 5000 or minp.y > 5280 then
 		return
 	end
@@ -99,17 +141,17 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local ore_perlin_map = minetest.get_perlin_map(ore_params, map_lengths_xyz):get3dMap_flat(minp)
 
 	local i = 1
+	local ore_count = 0
 	for z=minp.z,maxp.z do
 	for y=minp.y,maxp.y do
 	for x=minp.x,maxp.x do
-
 
 		local index = area:index(x,y,z)
 
 		-- higher elevation = lower chance
 		local chance = (y-minp.y) / side_length
 
-		if data[index] == c_air then
+		if data[index] == c_air or data[index] == c_vacuum or data[index] == c_ignore then
 			-- unpopulated node
 
 			local base_n = base_perlin_map[i]
@@ -120,6 +162,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				if ore_n < min_chance then
 					-- basic material
 					data[index] = c_base
+					ore_count = ore_count + 1
 
 				else
 					-- ore material
@@ -127,6 +170,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 					for _,ore in pairs(ores) do
 						if ore_n > ore.chance then
 							data[index] = ore.id
+							ore_count = ore_count + 1
 							break
 						end
 					end

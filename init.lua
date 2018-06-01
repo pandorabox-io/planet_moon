@@ -23,6 +23,62 @@ local ore_params = {
    persist = 0.6
 }
 
+local c_base = minetest.get_content_id("default:stone")
+local c_air = minetest.get_content_id("air")
+
+local ores = {}
+local min_chance = 1 -- everything below is stone
+
+local register_ore = function(def)
+	table.insert(ores, def)
+	min_chance = math.min(def.chance, min_chance)
+end
+
+register_ore({
+	id = minetest.get_content_id("air"),
+	chance = 1
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_diamond"),
+	chance = 0.998
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_mese"),
+	chance = 0.995
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_gold"),
+	chance = 0.99
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_copper"),
+	chance = 0.98
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_iron"),
+	chance = 0.9
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_coal"),
+	chance = 0.8
+})
+
+register_ore({
+	id = minetest.get_content_id("default:ice"),
+	chance = 0.45
+})
+
+-- sort ores
+table.sort(ores, function(a,b)
+	return b.chance < a.chance
+end)
+
 minetest.register_on_generated(function(minp, maxp, seed)
 
 	if minp.y < 5000 or minp.y > 5280 then
@@ -41,16 +97,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 	local base_perlin_map = minetest.get_perlin_map(base_params, map_lengths_xyz):get3dMap_flat(minp)
 	local ore_perlin_map = minetest.get_perlin_map(ore_params, map_lengths_xyz):get3dMap_flat(minp)
-
-	local c_base = minetest.get_content_id("default:stone")
-	local c_ore1 = minetest.get_content_id("default:ice")
-	local c_ore2 = minetest.get_content_id("default:stone_with_coal")
-	local c_ore3 = minetest.get_content_id("default:stone_with_iron")
-	local c_ore4 = minetest.get_content_id("default:stone_with_copper")
-	local c_ore5 = minetest.get_content_id("default:stone_with_gold")
-	local c_ore6 = minetest.get_content_id("default:stone_with_mese")
-	local c_ore7 = minetest.get_content_id("default:stone_with_diamond")
-	local c_air = minetest.get_content_id("air")
 
 	local i = 1
 	for z=minp.z,maxp.z do
@@ -71,36 +117,20 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 			if is_solid or base_n > chance then
 
-
-				if ore_n > 1 then
-					data[index] = c_air
-
-				elseif ore_n > 0.998 then
-					data[index] = c_ore7
-
-				elseif ore_n > 0.995 then
-					data[index] = c_ore6
-
-				elseif ore_n > 0.99 then
-					data[index] = c_ore5
-
-				elseif ore_n > 0.98 then
-					data[index] = c_ore4
-
-				elseif ore_n > 0.9 then
-					data[index] = c_ore3
-
-				elseif ore_n > 0.8 then
-					data[index] = c_ore2
-
-				elseif ore_n > 0.45 then
-					data[index] = c_ore1
+				if ore_n < min_chance then
+					-- basic material
+					data[index] = c_base
 
 				else
-					-- base material
+					-- ore material
 					data[index] = c_base
+					for _,ore in pairs(ores) do
+						if ore_n > ore.chance then
+							data[index] = ore.id
+							break
+						end
+					end
 				end
-
 			end
 		end
 

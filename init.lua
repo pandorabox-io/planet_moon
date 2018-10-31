@@ -126,6 +126,12 @@ table.sort(ores, function(a,b)
 	return b.chance < a.chance
 end)
 
+local base_perlin
+local ore_perlin
+
+local base_perlin_map = {}
+local ore_perlin_map = {}
+
 minetest.register_on_generated(function(minp, maxp, seed)
 
 	-- TODO: config height
@@ -143,8 +149,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local side_length = maxp.x - minp.x + 1 -- 80
 	local map_lengths_xyz = {x=side_length, y=side_length, z=side_length}
 
-	local base_perlin_map = minetest.get_perlin_map(base_params, map_lengths_xyz):get3dMap_flat(minp)
-	local ore_perlin_map = minetest.get_perlin_map(ore_params, map_lengths_xyz):get3dMap_flat(minp)
+	base_perlin = base_perlin or minetest.get_perlin_map(base_params, map_lengths_xyz)
+	ore_perlin = ore_perlin or minetest.get_perlin_map(ore_params, map_lengths_xyz)
+
+	base_perlin:get3dMap_flat(minp, base_perlin_map)
+	ore_perlin:get3dMap_flat(minp, ore_perlin_map)
 
 	local i = 1
 	local ore_count = 0

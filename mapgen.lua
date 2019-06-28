@@ -75,8 +75,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	end --y
 	end --z
 
-	minetest.generate_ores(vm, minp, maxp)
 	vm:set_data(data)
+	minetest.generate_ores(vm, minp, maxp)
 	vm:write_to_map()
 
 end)

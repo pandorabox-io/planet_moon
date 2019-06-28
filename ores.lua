@@ -68,5 +68,17 @@ if has_technic_mod then
 		y_min          = planet_moon.miny,
 	})
 
+	minetest.register_ore({
+		ore_type       = "scatter",
+		ore            = "technic:chernobylite_block",
+		wherein        = "default:stone",
+		clust_scarcity = 8 * 8 * 8,
+		clust_num_ores = 9,
+		clust_size     = 3,
+		y_max          = planet_moon.maxy,
+		y_min          = planet_moon.miny,
+	})
+
+
 end
 

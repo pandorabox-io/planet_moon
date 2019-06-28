@@ -1,6 +1,6 @@
 
 
-local has_bedrock_mod = minetest.get_modpath("bedrock")
+local has_maptools_mod = minetest.get_modpath("maptools")
 
 -- http://dev.minetest.net/PerlinNoiseMap
 
@@ -19,8 +19,8 @@ local c_base = minetest.get_content_id("default:stone")
 local c_bedrock
 
 
-if has_bedrock_mod then
-	c_bedrock = minetest.get_content_id("bedrock:bedrock")
+if has_maptools_mod then
+	c_bedrock = minetest.get_content_id("maptools:stone")
 end
 
 
@@ -53,7 +53,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 		local index = area:index(x,y,z)
 
-		if y >= planet_moon.miny and y < (planet_moon.miny + 10) and has_bedrock_mod then
+		if y >= planet_moon.miny and y < (planet_moon.miny + 10) and has_maptools_mod then
 			data[index] = c_bedrock
 
 		else

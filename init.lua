@@ -7,6 +7,7 @@ planet_moon = {
 
 local MP = minetest.get_modpath("planet_moon")
 
+dofile(MP.."/stone.lua")
 dofile(MP.."/ores.lua")
 dofile(MP.."/mapgen.lua")
 

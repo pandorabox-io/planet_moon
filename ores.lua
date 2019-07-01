@@ -1,13 +1,17 @@
 
 local has_technic_mod = minetest.get_modpath("technic")
 
+local clust_scarcity = 24 * 24
+local clust_num_ores = 27
+local clust_size = 10
+
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:stone_with_copper",
 	wherein        = "default:stone",
-	clust_scarcity = 24 * 24 * 24,
-	clust_num_ores = 27,
-	clust_size     = 6,
+	clust_scarcity = clust_scarcity,
+	clust_num_ores = clust_num_ores,
+	clust_size     = clust_size,
 	y_max          = planet_moon.maxy,
 	y_min          = planet_moon.miny,
 })
@@ -17,9 +21,9 @@ if has_technic_mod then
 		ore_type       = "scatter",
 		ore            = "technic:mineral_uranium",
 		wherein        = "default:stone",
-		clust_scarcity = 24 * 24 * 24,
-		clust_num_ores = 27,
-		clust_size     = 6,
+		clust_scarcity = clust_scarcity,
+		clust_num_ores = clust_num_ores,
+		clust_size     = clust_size,
 		y_max          = planet_moon.maxy,
 		y_min          = planet_moon.miny,
 	})
@@ -28,9 +32,9 @@ if has_technic_mod then
 		ore_type       = "scatter",
 		ore            = "technic:mineral_chromium",
 		wherein        = "default:stone",
-		clust_scarcity = 24 * 24 * 24,
-		clust_num_ores = 27,
-		clust_size     = 6,
+		clust_scarcity = clust_scarcity,
+		clust_num_ores = clust_num_ores,
+		clust_size     = clust_size,
 		y_max          = planet_moon.maxy,
 		y_min          = planet_moon.miny,
 	})
@@ -39,9 +43,9 @@ if has_technic_mod then
 		ore_type       = "scatter",
 		ore            = "technic:mineral_zinc",
 		wherein        = "default:stone",
-		clust_scarcity = 24 * 24 * 24,
-		clust_num_ores = 27,
-		clust_size     = 6,
+		clust_scarcity = clust_scarcity,
+		clust_num_ores = clust_num_ores,
+		clust_size     = clust_size,
 		y_max          = planet_moon.maxy,
 		y_min          = planet_moon.miny,
 	})
@@ -50,9 +54,9 @@ if has_technic_mod then
 		ore_type       = "scatter",
 		ore            = "technic:mineral_lead",
 		wherein        = "default:stone",
-		clust_scarcity = 24 * 24 * 24,
-		clust_num_ores = 27,
-		clust_size     = 6,
+		clust_scarcity = clust_scarcity,
+		clust_num_ores = clust_num_ores,
+		clust_size     = clust_size,
 		y_max          = planet_moon.maxy,
 		y_min          = planet_moon.miny,
 	})
@@ -61,9 +65,9 @@ if has_technic_mod then
 		ore_type       = "scatter",
 		ore            = "technic:mineral_sulfur",
 		wherein        = "default:stone",
-		clust_scarcity = 24 * 24 * 24,
-		clust_num_ores = 27,
-		clust_size     = 6,
+		clust_scarcity = clust_scarcity,
+		clust_num_ores = clust_num_ores,
+		clust_size     = clust_size,
 		y_max          = planet_moon.maxy,
 		y_min          = planet_moon.miny,
 	})

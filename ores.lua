@@ -83,6 +83,3 @@ minetest.register_ore({
 	y_max          = planet_moon.maxy,
 	y_min          = planet_moon.miny,
 })
-
-
-

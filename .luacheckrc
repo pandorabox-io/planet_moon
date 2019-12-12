@@ -2,7 +2,7 @@ unused_args = false
 allow_defined_top = true
 
 globals = {
-	"mapserver"
+	"planet_moon"
 }
 
 read_globals = {

@@ -1,85 +1,91 @@
-
 local has_technic_mod = minetest.get_modpath("technic")
+local has_vacuum_mod = minetest.get_modpath("vacuum")
 
-local clust_scarcity = 24 * 24 * 10
-local clust_num_ores = 27
-local clust_size = 10
+local register_ore = function(def)
+	table.insert(planet_moon.ores, def)
+	planet_moon.min_chance = math.min(def.chance, planet_moon.min_chance)
+end
 
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_copper",
-	wherein        = "default:stone",
-	clust_scarcity = clust_scarcity,
-	clust_num_ores = clust_num_ores,
-	clust_size     = clust_size,
-	y_max          = planet_moon.maxy,
-	y_min          = planet_moon.miny,
-})
 
-if has_technic_mod then
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = "technic:mineral_uranium",
-		wherein        = "default:stone",
-		clust_scarcity = clust_scarcity,
-		clust_num_ores = clust_num_ores,
-		clust_size     = clust_size,
-		y_max          = planet_moon.maxy,
-		y_min          = planet_moon.miny,
+if has_vacuum_mod then
+
+	c_vacuum = minetest.get_content_id("vacuum:vacuum")
+	register_ore({
+		id = c_vacuum,
+		chance = 1
 	})
 
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = "technic:mineral_chromium",
-		wherein        = "default:stone",
-		clust_scarcity = clust_scarcity,
-		clust_num_ores = clust_num_ores,
-		clust_size     = clust_size,
-		y_max          = planet_moon.maxy,
-		y_min          = planet_moon.miny,
-	})
-
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = "technic:mineral_zinc",
-		wherein        = "default:stone",
-		clust_scarcity = clust_scarcity,
-		clust_num_ores = clust_num_ores,
-		clust_size     = clust_size,
-		y_max          = planet_moon.maxy,
-		y_min          = planet_moon.miny,
-	})
-
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = "technic:mineral_lead",
-		wherein        = "default:stone",
-		clust_scarcity = clust_scarcity,
-		clust_num_ores = clust_num_ores,
-		clust_size     = clust_size,
-		y_max          = planet_moon.maxy,
-		y_min          = planet_moon.miny,
-	})
-
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = "technic:mineral_sulfur",
-		wherein        = "default:stone",
-		clust_scarcity = clust_scarcity,
-		clust_num_ores = clust_num_ores,
-		clust_size     = clust_size,
-		y_max          = planet_moon.maxy,
-		y_min          = planet_moon.miny,
+else
+	register_ore({
+		id = minetest.get_content_id("air"),
+		chance = 1
 	})
 end
 
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "planet_moon:radioactive_stone",
-	wherein        = "default:stone",
-	clust_scarcity = 8 * 8 * 8,
-	clust_num_ores = 9,
-	clust_size     = 3,
-	y_max          = planet_moon.maxy,
-	y_min          = planet_moon.miny,
+register_ore({
+	id = minetest.get_content_id("default:stone_with_diamond"),
+	chance = 0.998
 })
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_mese"),
+	chance = 0.995
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_gold"),
+	chance = 0.99
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_copper"),
+	chance = 0.98
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_iron"),
+	chance = 0.9
+})
+
+register_ore({
+	id = minetest.get_content_id("default:stone_with_coal"),
+	chance = 0.8
+})
+
+register_ore({
+	id = minetest.get_content_id("default:ice"),
+	chance = 0.45
+})
+
+if has_technic_mod then
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_uranium"),
+		chance = 0.95
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_chromium"),
+		chance = 0.82
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_zinc"),
+		chance = 0.75
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_lead"),
+		chance = 0.7
+	})
+
+	register_ore({
+		id = minetest.get_content_id("technic:mineral_sulfur"),
+		chance = 0.6
+	})
+
+end
+
+-- sort ores
+table.sort(planet_moon.ores, function(a,b)
+	return b.chance < a.chance
+end)

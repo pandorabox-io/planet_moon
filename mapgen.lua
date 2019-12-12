@@ -14,6 +14,16 @@ local base_params = {
    persist = 0.6
 }
 
+-- ore params
+local ore_params = {
+   offset = 0,
+   scale = 1,
+   spread = {x=128, y=64, z=128},
+   seed = 3454657,
+   octaves = 4,
+   persist = 0.6
+}
+
 
 local c_base = minetest.get_content_id("default:stone")
 local c_bedrock
@@ -26,6 +36,9 @@ end
 
 local base_perlin
 local base_perlin_map = {}
+
+local ore_perlin
+local ore_perlin_map = {}
 
 minetest.register_on_generated(function(minp, maxp, seed)
 
@@ -44,7 +57,10 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local map_lengths_xyz = {x=side_length, y=side_length, z=side_length}
 
 	base_perlin = base_perlin or minetest.get_perlin_map(base_params, map_lengths_xyz)
+  ore_perlin = ore_perlin or minetest.get_perlin_map(ore_params, map_lengths_xyz)
+
 	base_perlin:get3dMap_flat(minp, base_perlin_map)
+  ore_perlin:get3dMap_flat(minp, ore_perlin_map)
 
 	local i = 1
 	for z=minp.z,maxp.z do
@@ -60,12 +76,27 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			-- unpopulated node
 
 			-- higher elevation = lower chance
-			local chance = (y-minp.y) / side_length
+      local chance = (y-minp.y) / side_length
 
 			local base_n = base_perlin_map[i]
+			local ore_n = ore_perlin_map[i]
 
 			if is_solid or base_n > chance then
-				data[index] = c_base
+
+				if ore_n < planet_moon.min_chance then
+					-- basic material
+					data[index] = c_base
+
+				else
+					-- ore material
+					data[index] = c_base
+					for _,ore in pairs(planet_moon.ores) do
+						if ore_n > ore.chance then
+							data[index] = ore.id
+							break
+						end
+					end
+				end
 			end
 		end
 
@@ -76,7 +107,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	end --z
 
 	vm:set_data(data)
-	minetest.generate_ores(vm, minp, maxp)
 	vm:write_to_map()
 
 end)

@@ -12,7 +12,5 @@ local MP = minetest.get_modpath("planet_moon")
 dofile(MP.."/legacy.lua")
 dofile(MP.."/ores.lua")
 dofile(MP.."/mapgen.lua")
-dofile(MP.."/gas.lua")
-
 
 print("[OK] Planet: moon")

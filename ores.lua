@@ -6,7 +6,7 @@ local register_ore = function(def)
 	planet_moon.min_chance = math.min(def.chance, planet_moon.min_chance)
 end
 
-
+-- inner core of the veins
 if has_vacuum_mod then
 
 	c_vacuum = minetest.get_content_id("vacuum:vacuum")
@@ -22,59 +22,37 @@ else
 	})
 end
 
-register_ore({
-	id = minetest.get_content_id("default:stone_with_diamond"),
-	chance = 0.998
-})
-
-register_ore({
-	id = minetest.get_content_id("default:stone_with_mese"),
-	chance = 0.995
-})
-
-register_ore({
-	id = minetest.get_content_id("default:stone_with_gold"),
+-- prepare layers
+local layer1 = {
+	id_list = {
+		minetest.get_content_id("default:stone_with_diamond"),
+		minetest.get_content_id("default:stone_with_mese"),
+		minetest.get_content_id("default:stone_with_gold")
+	},
 	chance = 0.99
-})
+}
 
-register_ore({
-	id = minetest.get_content_id("default:stone_with_copper"),
-	chance = 0.98
-})
-
-register_ore({
-	id = minetest.get_content_id("default:stone_with_iron"),
-	chance = 0.9
-})
-
-register_ore({
-	id = minetest.get_content_id("default:stone_with_coal"),
+local layer2 = {
+	id_list = {
+		minetest.get_content_id("default:stone_with_copper"),
+		minetest.get_content_id("default:stone_with_iron"),
+		minetest.get_content_id("default:stone_with_coal")
+	},
 	chance = 0.8
-})
+}
 
-register_ore({
-	id = minetest.get_content_id("default:ice"),
-	chance = 0.45
-})
 
 if has_technic_mod then
-	register_ore({
-		id = minetest.get_content_id("technic:mineral_uranium"),
-		chance = 0.95
-	})
+	-- populate technic stuff
+
+	table.insert(layer2.id_list, minetest.get_content_id("technic:mineral_chromium"))
+	table.insert(layer2.id_list, minetest.get_content_id("technic:mineral_uranium"))
 
 	register_ore({
-		id = minetest.get_content_id("technic:mineral_chromium"),
-		chance = 0.82
-	})
-
-	register_ore({
-		id = minetest.get_content_id("technic:mineral_zinc"),
-		chance = 0.75
-	})
-
-	register_ore({
-		id = minetest.get_content_id("technic:mineral_lead"),
+		id_list = {
+			minetest.get_content_id("technic:mineral_lead"),
+			minetest.get_content_id("technic:mineral_zinc")
+		},
 		chance = 0.7
 	})
 
@@ -84,6 +62,16 @@ if has_technic_mod then
 	})
 
 end
+
+-- register prepared layers
+register_ore(layer1)
+register_ore(layer2)
+
+register_ore({
+	id = minetest.get_content_id("default:ice"),
+	chance = 0.45
+})
+
 
 -- sort ores
 table.sort(planet_moon.ores, function(a,b)

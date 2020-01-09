@@ -40,7 +40,7 @@ local base_perlin_map = {}
 local ore_perlin
 local ore_perlin_map = {}
 
-minetest.register_on_generated(function(minp, maxp, seed)
+minetest.register_on_generated(function(minp, maxp)
 
 	if minp.y < planet_moon.miny or minp.y > planet_moon.maxy then
 		return

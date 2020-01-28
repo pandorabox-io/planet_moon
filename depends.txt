@@ -1,5 +1,0 @@
-default
-vacuum?
-technic_worldgen?
-maptools?
-skybox?

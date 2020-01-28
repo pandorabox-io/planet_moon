@@ -19,5 +19,5 @@ read_globals = {
 	"vacuum",
 
 	-- optional mods
-	"planetoidgen"
+	"planetoidgen", "skybox"
 }

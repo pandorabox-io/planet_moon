@@ -13,4 +13,8 @@ dofile(MP.."/legacy.lua")
 dofile(MP.."/ores.lua")
 dofile(MP.."/mapgen.lua")
 
+if minetest.get_modpath("skybox") then
+	dofile(MP.."/skybox.lua")
+end
+
 print("[OK] Planet: moon")
